@@ -1,7 +1,7 @@
-import CategoriaDAO from "../Persistencia/categoriaDAO.js";
-//não esqueça do .js no final da importação
+import CargoDAO from "../Persistencia/cargoDAO.js";
 
-export default class Categoria {
+
+export default class Cargo {
     //definição dos atributos privados
     #codigo;
     #descricao;
@@ -40,23 +40,28 @@ export default class Categoria {
 
     //camada de modelo acessa a camada de persistencia
     async gravar(){
-        const catDAO = new CategoriaDAO();
-        await catDAO.gravar(this);
+        const cargDAO = new CargoDAO();
+        await cargDAO.gravar(this);
     }
 
     async excluir(){
-        const catDAO = new CategoriaDAO();
-        await catDAO.excluir(this);
+        const cargDAO = new CargoDAO();
+        await cargDAO.excluir(this);
     }
 
     async atualizar(){
-        const catDAO = new CategoriaDAO();
-        await catDAO.atualizar(this);
+        const cargDAO = new CargoDAO();
+        await cargDAO.atualizar(this);
 
     }
 
     async consultar(parametro){
-        const catDAO = new CategoriaDAO();
-        return await catDAO.consultar(parametro);
+        const cargDAO = new CargoDAO();
+        return await cargDAO.consultar(parametro);
+    }
+
+    async possuiColaboradores(){
+        const cargDAO = new CargoDAO();
+        return await cargDAO.possuiColaboradores(this);
     }
 }
