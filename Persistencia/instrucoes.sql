@@ -9,7 +9,7 @@ CREATE TABLE cargo(
 );
 
 
-novo cargo
+novo cargo localhost:3000/cargo
 {
     "descricao": "Analista de Sistemas"
 }
@@ -31,7 +31,7 @@ novo cargo
                 CONSTRAINT fk_cargo FOREIGN KEY(carg_codigo) REFERENCES cargo(carg_codigo)
             );
 
-novo colaborador
+novo colaborador localhost:3000/colaborador
 
 {
     "nome": "João da Silva",
@@ -58,7 +58,7 @@ CREATE TABLE parteinteressada (
     profissao VARCHAR(255) NOT NULL
 );
 
-nova parteinteressada
+nova parteinteressada localhost:3000/parteinteressada
 
 {
     "nome": "Empresa XYZ",
@@ -79,7 +79,7 @@ CREATE TABLE projeto (
 );
 
 
-novo projeto
+novo projeto localhost:3000/projeto
 
 {
     "nomeprojeto": "Implementação de Sistema ERP",
