@@ -22,3 +22,32 @@ CREATE TABLE cargo(
                 CONSTRAINT pk_colaborador PRIMARY KEY(colab_codigo),
                 CONSTRAINT fk_cargo FOREIGN KEY(carg_codigo) REFERENCES cargo(carg_codigo)
             );
+
+
+
+CREATE TABLE parteinteressada (
+    codigo INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    profissao VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE projeto (
+    codigo INT AUTO_INCREMENT PRIMARY KEY,
+    parteinteressada_codigo INT,
+    nomeprojeto VARCHAR(255) NOT NULL,
+    datainicio_projeto TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    totalcapital DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (parteinteressada_codigo) REFERENCES parteinteressada(codigo)
+);
+
+
+CREATE TABLE projeto_colaborador (
+    projeto_codigo INT NOT NULL,
+    colab_codigo INT NOT NULL,
+    funcao VARCHAR(255) NOT NULL,
+    PRIMARY KEY (projeto_codigo, colab_codigo),
+    FOREIGN KEY (projeto_codigo) REFERENCES projeto(codigo),
+    FOREIGN KEY (colab_codigo) REFERENCES colaborador(colab_codigo)
+);
