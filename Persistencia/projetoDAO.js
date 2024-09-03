@@ -17,9 +17,9 @@ export default class ProjetoDAO{
                 const retorno = await conexao.execute(sql, parametros);
                 projeto.codigo = retorno[0].insertId;
     
-                const sql2 = 'INSERT INTO projeto_colaborador(projeto_codigo, colab_codigo, funcao) VALUES(?, ?, ?)';
+                const sql2 = 'INSERT INTO projeto_colaborador(projeto_codigo, colab_codigo, funcao, parteinteressada_codigo) VALUES(?, ?, ?, ?)';
                 for (const item of projeto.colaboradores) {
-                    const parametros2 = [projeto.codigo, item.colaborador.codigo, item.funcao];
+                    const parametros2 = [projeto.codigo, item.colaborador.codigo, item.funcao, projeto.parteinteressada.codigo];
                     console.log("Parâmetros para colaborador:", parametros2);
                     await conexao.execute(sql2, parametros2);
                 }
