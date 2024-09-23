@@ -125,7 +125,7 @@ export default class Colaborador{
             endereco:this.#endereco,
             bairro:this.#bairro,
             numero:this.#numero,
-            dataNascimento:this.#dataNascimento,
+            dataNascimento: new Date(this.#dataNascimento).toLocaleDateString(),
             email:this.#email,
             cargo:this.#cargo.toJSON() //JS já faz isso ".toJSON"
         }

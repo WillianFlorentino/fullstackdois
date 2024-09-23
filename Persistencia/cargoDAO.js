@@ -18,7 +18,8 @@ export default class CargoDAO{
                     CONSTRAINT pk_cargo PRIMARY KEY(carg_codigo)
                 );`;
             await conexao.execute(sql);
-            await conexao.release();
+            global.poolConexoes.releaseConnection(conexao);
+            // await conexao.release();
         }
         catch (e) {
             console.log("Não foi possível iniciar o banco de dados: " + e.message);
@@ -57,43 +58,58 @@ export default class CargoDAO{
         }
     }
 
-    async consultar(parametroConsulta){
-        let sql='';
-        let parametros=[];
-        //é um número inteiro?
-        if (!isNaN(parseInt(parametroConsulta))){
-            //consultar pelo código da cargo
-            sql='SELECT * FROM cargo WHERE carg_codigo = ? order by carg_descricao';
+    async consultar(parametroConsulta) {
+        let sql = '';
+        let parametros = [];
+    
+        if (!isNaN(parseInt(parametroConsulta))) {
+            // Consultar pelo código do cargo
+            sql = 'SELECT * FROM cargo WHERE carg_codigo = ? ORDER BY carg_descricao';
             parametros = [parametroConsulta];
-        }
-        else{
-            //consultar pela descricao
-            if (!parametroConsulta){
+        } else {
+            // Consultar pela descrição
+            if (!parametroConsulta) {
                 parametroConsulta = '';
             }
-            sql = "SELECT * FROM cargo WHERE carg_descricao like ?";
-            parametros = ['%'+parametroConsulta+'%'];
+            sql = 'SELECT * FROM cargo WHERE carg_descricao LIKE ?';
+            parametros = ['%' + parametroConsulta + '%'];
         }
+    
         const conexao = await conectar();
-        const [registros, campos] = await conexao.execute(sql,parametros);
-        let listaCargos = [];
-        for (const registro of registros){
-            const cargo = new Cargo(registro.carg_codigo,registro.carg_descricao);
-            listaCargos.push(cargo);
+        try {
+            const [registros] = await conexao.execute(sql, parametros);
+            let listaCargos = [];
+            for (const registro of registros) {
+                const cargo = new Cargo(registro.carg_codigo, registro.carg_descricao);
+                listaCargos.push(cargo);
+            }
+            return listaCargos;
+        } catch (erro) {
+            console.error('Erro ao consultar cargos:', erro);
+            throw erro; // Gera erro se algo falhar
+        } finally {
+            global.poolConexoes.releaseConnection(conexao); // Libera a conexão no final
         }
-        return listaCargos;
     }
-
+    
     //verifica a existencia de colaboradores para x cargo
 
-    async possuiColaboradores(cargo){
-        if (cargo instanceof Cargo){
+    async possuiColaboradores(cargo) {
+        if (cargo instanceof Cargo) {
             const sql = `SELECT count(*) as qtd FROM colaborador p
-	                    INNER JOIN cargo c ON p.carg_codigo = c.carg_codigo
-	                    WHERE c.carg_codigo = ?`;
+                        INNER JOIN cargo c ON p.carg_codigo = c.carg_codigo
+                        WHERE c.carg_codigo = ?`;
             const parametros = [cargo.codigo];
-            const [registros] = await global.poolConexoes.execute(sql,parametros);
-            return registros[0].qtd > 0;
+            const conexao = await conectar(); // Cria a conexão corretamente
+            try {
+                const [registros] = await conexao.execute(sql, parametros);
+                return registros[0].qtd > 0;
+            } catch (erro) {
+                console.error('Erro ao verificar colaboradores:', erro);
+                throw erro; // Gera erro se algo falhar
+            } finally {
+                global.poolConexoes.releaseConnection(conexao); // Libera a conexão no final
+            }
         }
     }
 }

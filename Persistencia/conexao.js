@@ -10,8 +10,8 @@ export default async function conectar(){
             user: process.env.USUARIO_BD, //jamais faça isso
             password: process.env.SENHA_BD,  //never, nunca, jamais
             database: 'sistema',
-            waitForConnections: true,
-            connectionLimit: 10,
+            // waitForConnections: true,
+            connectionLimit: 50,
             maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
             idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
             queueLimit: 0,
@@ -20,6 +20,6 @@ export default async function conectar(){
           });
 
           global.poolConexoes = pool;
-          return await pool.getConnection();
+          return await global.poolConexoes.getConnection();
     }
 }

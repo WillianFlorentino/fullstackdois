@@ -13,6 +13,6 @@ rotaCargo
 .post('/',cargCtrl.gravar)
 .patch('/',cargCtrl.atualizar)
 .put('/',cargCtrl.atualizar)
-.delete('/',cargCtrl.excluir);
+.delete('/:codigo',cargCtrl.excluir);
 
 export default rotaCargo;

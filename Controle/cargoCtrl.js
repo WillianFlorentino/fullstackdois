@@ -79,54 +79,96 @@ export default class CargoCtrl {
         }
     }
 
+    // excluir(requisicao, resposta) {
+    //     resposta.type('application/json');
+    //     if (requisicao.method === 'DELETE') {
+    //         const codigo = requisicao.params.codigo; // Obtém o código do cargo da URL
+    //         if (codigo) {
+    //             const cargo = new Cargo(codigo);
+    //             cargo.possuiColaboradores().then(possui => {
+    //                 if (!possui) {
+    //                     cargo.excluir().then(() => {
+    //                         resposta.status(200).json({
+    //                             "status": true,
+    //                             "mensagem": "Cargo excluído com sucesso!"
+    //                         });
+    //                     }).catch((erro) => {
+    //                         resposta.status(500).json({
+    //                             "status": false,
+    //                             "mensagem": "Erro ao excluir o cargo: " + erro.message
+    //                         });
+    //                     });
+    //                 } else {
+    //                     resposta.status(500).json({
+    //                         "status": false,
+    //                         "mensagem": "Este cargo possui colaborador(es) e não pode ser excluído!"
+    //                     });
+    //                 }
+    //             }).catch((erro) => {
+    //                 resposta.status(500).json({
+    //                     "status": false,
+    //                     "mensagem": "Erro ao verificar colaboradores: " + erro.message
+    //                 });
+    //             });
+    //         } else {
+    //             resposta.status(400).json({
+    //                 "status": false,
+    //                 "mensagem": "Por favor, informe o código do cargo!"
+    //             });
+    //         }
+    //     } else {
+    //         resposta.status(400).json({
+    //             "status": false,
+    //             "mensagem": "Por favor, utilize o método DELETE para excluir um cargo!"
+    //         });
+    //     }
+    // }
+    
     excluir(requisicao, resposta) {
         resposta.type('application/json');
-        if (requisicao.method === 'DELETE' && requisicao.is('application/json')) {
-            const dados = requisicao.body;
-            const codigo = dados.codigo;
+        if (requisicao.method === 'DELETE') {
+            const codigo = requisicao.params.codigo; // Código vem da URL
             if (codigo) {
                 const cargo = new Cargo(codigo);
-                cargo.possuiColaboradores().then(possui =>{
-                    if (possui == false){
+                cargo.possuiColaboradores().then(possui => {
+                    if (!possui) {
                         cargo.excluir().then(() => {
                             resposta.status(200).json({
                                 "status": true,
                                 "mensagem": "Cargo excluído com sucesso!"
                             });
-                        })
-                        .catch((erro) => {
-                                resposta.status(500).json({
-                                    "status": false,
-                                    "mensagem": "Erro ao excluir a cargo:" + erro.message
-                                });
+                        }).catch((erro) => {
+                            resposta.status(500).json({
+                                "status": false,
+                                "mensagem": "Erro ao excluir o cargo: " + erro.message
+                            });
                         });
-                    }
-                    else{
+                    } else {
                         resposta.status(500).json({
                             "status": false,
                             "mensagem": "Este cargo possui colaborador(es) e não pode ser excluído!"
-                        })
+                        });
                     }
-                }); //possuicolaboradores
-
-                
-                //resolver a promise
- 
-            }
-            else {
+                }).catch((erro) => {
+                    resposta.status(500).json({
+                        "status": false,
+                        "mensagem": "Erro ao verificar colaboradores: " + erro.message
+                    });
+                });
+            } else {
                 resposta.status(400).json({
                     "status": false,
                     "mensagem": "Por favor, informe o código do cargo!"
                 });
             }
-        }
-        else {
+        } else {
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Por favor, utilize o método DELETE para excluir um cargo!"
             });
         }
     }
+    
 
 
     consultar(requisicao, resposta) {

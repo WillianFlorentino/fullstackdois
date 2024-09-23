@@ -29,7 +29,7 @@ export default class ColaboradorDAO {
             )
         `;
             await conexao.execute(sql);
-            await conexao.release();
+            global.poolConexoes.releaseConnection(conexao);
         }
         catch (e) {
             console.log("Não foi possível iniciar o banco de dados: " + e.message);
@@ -41,7 +41,7 @@ export default class ColaboradorDAO {
         if (colaborador instanceof Colaborador) {
             const sql = `INSERT INTO colaborador(colab_nome, colab_cpf,
                 colab_contato, colab_endereco, colab_bairro, colab_numero, colab_dataNascimento, colab_email, carg_codigo)
-                VALUES(?,?,?,?,?,?,?,?,?)`;
+                VALUES(?,?,?,?,?,?,str_to_date(?,"%d/%m/%Y"),?,?)`;
             const parametros = [colaborador.nome, colaborador.cpf, colaborador.contato,
                 colaborador.endereco, colaborador.bairro, colaborador.numero, colaborador.dataNascimento, colaborador.email, colaborador.cargo.codigo];
 
@@ -54,7 +54,7 @@ export default class ColaboradorDAO {
     async atualizar(colaborador) {
         if (colaborador instanceof Colaborador) {
             const sql = `UPDATE colaborador SET colab_nome = ?, colab_cpf = ?,
-            colab_contato = ?, colab_endereco = ?, colab_bairro = ?, colab_numero = ?, colab_dataNascimento = ?, colab_email = ?, carg_codigo = ?
+            colab_contato = ?, colab_endereco = ?, colab_bairro = ?, colab_numero = ?, colab_dataNascimento = str_to_date(?,"%d/%m/%Y"), colab_email = ?, carg_codigo = ?
             WHERE colab_codigo = ?`;
             const parametros = [colaborador.nome, colaborador.cpf, colaborador.contato,
                 colaborador.endereco, colaborador.bairro, colaborador.numero, colaborador.dataNascimento, colaborador.email, colaborador.cargo.codigo, colaborador.codigo];
@@ -95,6 +95,7 @@ export default class ColaboradorDAO {
             `;
             const parametros=[termo];
             const [registros, campos] = await conexao.execute(sql,parametros);
+            global.poolConexoes.releaseConnection(conexao);
             for (const registro of registros){
                 const colaborador = new Colaborador(registro.colab_codigo,registro.colab_nome,
                                             registro.colab_cpf,registro.colab_contato,

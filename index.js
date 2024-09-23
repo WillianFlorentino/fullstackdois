@@ -11,7 +11,7 @@ import rotaProjeto from './Rotas/rotaProjeto.js';
 
 dotenv.config();//carrega as variáveis de ambiente extraindo elas do arquivo .env
 const host='0.0.0.0';
-const porta=3000;
+const porta=4000;
 
 const app = express();
 
@@ -19,9 +19,19 @@ app.use(session({
     secret: process.env.CHAVE_SECRETA,
     resave: false, //a cada requisição a sessão precisa ser atualizada
     saveUninitialized: true, //salvar sessões não iniciadas
-    cookie: { maxAge: 1000 * 60 * 15 } //define quanto tempo a sessão será válida (tempo máximo de ociosidade para considerar a sessão vencida)
+    cookie: {
+        httpOnly: false,
+        secure: false,
+        sameSite: false,
+        maxAge: 1000 * 60 * 15 } //define quanto tempo a sessão será válida (tempo máximo de ociosidade para considerar a sessão vencida)
 }));
-app.use(cors());
+
+app.use(cors({
+    credentials: true, //middleware para passar “Access-Control-Allow-Credentials” no cabeçalho das requisições.
+    origin: ["http://localhost:3000","http://192.168.137.1:3000 "],
+}));
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

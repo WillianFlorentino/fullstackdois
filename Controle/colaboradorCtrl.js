@@ -11,14 +11,7 @@ export default class ColaboradorCtrl {
     
             // Verificar se todos os campos obrigatórios estão presentes
             if (nome && cpf && contato && endereco && bairro && numero > 0 && dataNascimento && email && cargo && cargo.codigo > 0) {
-                if (!/^\d{4}-\d{2}-\d{2}$/.test(dataNascimento)) {
-                    return resposta.status(400).json({
-                        "status": false,
-                        "mensagem": "Formato de data inválido! Utilize o formato YYYY-MM-DD para a data de nascimento."
-                    });
-                }
-
-                const cargoObj = new Cargo(cargo.codigo);
+               const cargoObj = new Cargo(cargo.codigo);
                 const colaborador = new Colaborador(0, nome, cpf, contato, endereco, bairro, numero, dataNascimento, email, cargoObj);
     
                 colaborador.gravar().then(() => {
@@ -58,13 +51,6 @@ export default class ColaboradorCtrl {
                 nome && cpf && contato && endereco && bairro && numero &&
                 dataNascimento && email && carg_codigo > 0
             ) {
-                if (!/^\d{4}-\d{2}-\d{2}$/.test(dataNascimento)) {
-                    return resposta.status(400).json({
-                        "status": false,
-                        "mensagem": "Formato de data inválido! Utilize o formato YYYY-MM-DD para a data de nascimento."
-                    });
-                }
-    
                 const cargoObj = new Cargo(carg_codigo);
                 const colaborador = new Colaborador(codigo, nome, cpf, contato, endereco, bairro, numero, dataNascimento, email, cargoObj);
     
