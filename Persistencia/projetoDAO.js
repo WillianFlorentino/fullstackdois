@@ -86,7 +86,9 @@ export default class ProjetoDAO{
                 let listaItensProjeto = [];
                 for (const registro of registros){
                     const cargo = new Cargo(registro.carg_codigo, registro.carg_descricao);
-                    const colaborador = new Colaborador(registro.colab_codigo, registro.colab_nome, registro.colab_cpf, registro.colab_contato, registro.colab_endereco, registro.colab_bairro, registro.colab_numero, registro.colab_dataNascimento, registro.colab_email, cargo);
+                    
+                    const colaborador = new Colaborador(registro.colaborador_codigo, registro.colab_nome, registro.colab_cpf, registro.colab_contato, registro.colab_endereco, registro.colab_bairro, registro.colab_numero, registro.colab_dataNascimento, registro.colab_email, cargo);
+                   
                     const projetoColaborador = new ProjetoColaborador(colaborador, registro.cargo_funcao, registro.dataEntrada);
                     listaItensProjeto.push(projetoColaborador);
                 }
@@ -99,5 +101,60 @@ export default class ProjetoDAO{
         return listaProjetos;
     }
     
+    //aqui começa o novo
 
+
+    
+    // async consultarTodos() {
+    //     const conexao = await conectar();
+    //     const sql = `SELECT 
+    //         p.codigo,
+    //         p.nomeprojeto,
+    //         p.parteinteressada_codigo,
+    //         p.datainicio_projeto,
+    //         p.totalcapital,
+    //         c.nome AS parteinteressada_nome,
+    //         colab.colab_nome,
+    //         colab.colab_codigo,
+    //         colab.colab_cpf,
+    //         colab.colab_contato,
+    //         colab.colab_endereco,
+    //         colab.colab_bairro,
+    //         colab.colab_numero,
+    //         colab.colab_dataNascimento,
+    //         colab.colab_email,
+    //         carg.carg_codigo,
+    //         carg.carg_descricao,
+    //         i.funcao AS cargo_funcao
+    //     FROM 
+    //         projeto as p
+    //     INNER JOIN 
+    //         parteinteressada c ON p.parteinteressada_codigo = c.codigo
+    //     INNER JOIN 
+    //         projeto_colaborador i ON i.projeto_codigo = p.codigo
+    //     INNER JOIN 
+    //         colaborador colab ON colab.colab_codigo = i.colab_codigo
+    //     INNER JOIN 
+    //         cargo carg ON colab.carg_codigo = carg.carg_codigo`;
+    //     const [registros, campos] = await conexao.execute(sql);
+    //     const listaProjetos = {};
+    //     for (const registro of registros) {
+    //         if (!listaProjetos[registro.codigo]) {
+    //             listaProjetos[registro.codigo] = {
+    //                 "nomeprojeto": registro.nomeprojeto,
+    //                 "parteinteressada": registro.parteinteressada_codigo,
+    //                 "datainicio": registro.datainicio_projeto,
+    //                 "totalcapital": registro.totalcapital,
+    //                 "colaboradores": []
+    //             };
+    //         }
+    //         listaProjetos[registro.codigo].colaboradores.push({
+    //             "colaborador": {
+    //                 "codigo": registro.colab_codigo
+    //             },
+    //             "funcao": registro.cargo_funcao
+    //         });
+    //     }
+    //     return Object.values(listaProjetos);
+    // }
 }

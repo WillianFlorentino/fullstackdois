@@ -13,13 +13,13 @@
 //         this.#total = total;
 //         this.#produtos = produtos;
 //     }
-
+import conectar from "../Persistencia/conexao.js";
 import ProjetoDAO from "../Persistencia/projetoDAO.js"
 
 export default class Projeto {
     #codigo;
-    #parteinteressada;
     #nomeprojeto;
+    #parteinteressada;
     #datainicio;
     #totalcapital;
     #colaboradores;
@@ -127,4 +127,20 @@ export default class Projeto {
         return listaProjetos;
     }
     
+async consultarTodos() {
+  return new Promise((resolve, reject) => {
+    conectar().then((conexao) => {
+      const sql = 'SELECT * FROM projeto';
+      conexao.execute(sql).then(([resultados]) => {
+        conexao.release(); 
+        resolve(resultados);  
+      }).catch((erro) => {
+        conexao.destroy(); 
+        reject(erro);  
+      });
+    }).catch((erro) => {
+      reject(erro); 
+    });
+  });
+}
 }
