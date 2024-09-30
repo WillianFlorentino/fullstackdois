@@ -8,7 +8,7 @@ rotaProjeto
 .get('/:termo', projetoCtrl.consultar)
 
 .post('/', projetoCtrl.gravar)
-.get('/', projetoCtrl.consultarTodos)
+.get('/:termo', projetoCtrl.consultar)
 .get('/', projetoCtrl.consultar);
 
 

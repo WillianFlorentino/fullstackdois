@@ -22,15 +22,17 @@ export default class Projeto {
     #parteinteressada;
     #datainicio;
     #totalcapital;
-    #colaboradores;
+    #itens;
+    // #colaboradores;
 
-    constructor(codigo, nomeprojeto, parteinteressada, datainicio,  totalcapital, colaboradores) {
+    constructor(codigo, nomeprojeto, parteinteressada, datainicio,  totalcapital, itens) {
         this.#codigo = codigo;
         this.#nomeprojeto = nomeprojeto;
         this.#parteinteressada = parteinteressada;
         this.#datainicio = datainicio;
         this.#totalcapital = totalcapital;
-        this.#colaboradores = colaboradores;
+        this.#itens = itens;
+        // this.#colaboradores = colaboradores;
     }
 
     // Métodos de acesso (get) e modificação (set)
@@ -85,14 +87,21 @@ export default class Projeto {
         this.#totalcapital = novoTotalcapital;
     }
 
-    
-    get colaboradores() {
-        return this.#colaboradores;
+    get itens() {
+        return this.#itens;
     }
 
-    set colaboradores(novosColaboradores) {
-        this.#colaboradores = novosColaboradores;
+    set colaboradores(novosItens) {
+        this.#itens = novosItens;
     }
+    
+    // get colaboradores() {
+    //     return this.#colaboradores;
+    // }
+
+    // set colaboradores(novosColaboradores) {
+    //     this.#colaboradores = novosColaboradores;
+    // }
     // JSON
     toJSON() {
         return {
@@ -101,7 +110,8 @@ export default class Projeto {
             'parteinteressada': this.#parteinteressada,
             'datainicio': this.#datainicio,
             'totalcapital': this.#totalcapital,
-            'colaboradores': this.#colaboradores
+            'colaboradores': this.#itens
+            // 'colaboradores': this.#colaboradores
 
         };
     }
@@ -127,20 +137,20 @@ export default class Projeto {
         return listaProjetos;
     }
     
-async consultarTodos() {
-  return new Promise((resolve, reject) => {
-    conectar().then((conexao) => {
-      const sql = 'SELECT * FROM projeto';
-      conexao.execute(sql).then(([resultados]) => {
-        conexao.release(); 
-        resolve(resultados);  
-      }).catch((erro) => {
-        conexao.destroy(); 
-        reject(erro);  
-      });
-    }).catch((erro) => {
-      reject(erro); 
-    });
-  });
-}
+// async consultarTodos() {
+//   return new Promise((resolve, reject) => {
+//     conectar().then((conexao) => {
+//       const sql = 'SELECT * FROM projeto';
+//       conexao.execute(sql).then(([resultados]) => {
+//         conexao.release(); 
+//         resolve(resultados);  
+//       }).catch((erro) => {
+//         conexao.destroy(); 
+//         reject(erro);  
+//       });
+//     }).catch((erro) => {
+//       reject(erro); 
+//     });
+//   });
+// }
 }

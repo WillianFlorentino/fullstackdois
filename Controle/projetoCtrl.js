@@ -86,71 +86,106 @@ async gravar(requisicao, resposta) {
 
     //aqui começa o novo
 
-    async consultar(requisicao, resposta) {
-        resposta.type('application/json');
+    // async consultar(requisicao, resposta) {
+    //     resposta.type('application/json');
         
-        if (requisicao.method === 'GET') {
-            let termo = requisicao.params.termo;
-            const projeto = new Projeto(0);  // Instancia a classe Projeto
+    //     if (requisicao.method === 'GET') {
+    //         let termo = requisicao.params.termo;
+    //         const projeto = new Projeto(0);  // Instancia a classe Projeto
         
-            // Se 'termo' for um número, consulta um projeto específico
-            if (termo && !isNaN(termo)) {
-                projeto.consultar(termo).then((listaProjetos) => {
-                    resposta.status(200).json({
-                        "status": true,
-                        "listaProjetos": listaProjetos
-                    });
-                }).catch((erro) => {
-                    resposta.status(500).json({
-                        "status": false,
-                        "mensagem": "Erro ao consultar o projeto: " + erro.message
-                    });
-                });
-            } 
-            // Se 'termo' não for fornecido, consulta todos os projetos
-            else {
-                projeto.consultarTodos().then((listaProjetos) => {
-                    resposta.status(200).json({
-                        "status": true,
-                        "listaProjetos": listaProjetos
-                    });
-                }).catch((erro) => {
-                    resposta.status(500).json({
-                        "status": false,
-                        "mensagem": "Erro ao consultar os projetos: " + erro.message
-                    });
-                });
-            }
-        } else {
-            resposta.status(400).json({
-                "status": false,
-                "mensagem": "Requisição inválida!"
-            });
-        }
-    }
+    //         // Se 'termo' for um número, consulta um projeto específico
+    //         if (termo && !isNaN(termo)) {
+    //             projeto.consultar(termo).then((listaProjetos) => {
+    //                 resposta.status(200).json({
+    //                     "status": true,
+    //                     "listaProjetos": listaProjetos
+    //                 });
+    //             }).catch((erro) => {
+    //                 resposta.status(500).json({
+    //                     "status": false,
+    //                     "mensagem": "Erro ao consultar o projeto: " + erro.message
+    //                 });
+    //             });
+    //         } 
+    //         // Se 'termo' não for fornecido, consulta todos os projetos
+    //         else {
+    //             projeto.consultarTodos().then((listaProjetos) => {
+    //                 resposta.status(200).json({
+    //                     "status": true,
+    //                     "listaProjetos": listaProjetos
+    //                 });
+    //             }).catch((erro) => {
+    //                 resposta.status(500).json({
+    //                     "status": false,
+    //                     "mensagem": "Erro ao consultar os projetos: " + erro.message
+    //                 });
+    //             });
+    //         }
+    //     } else {
+    //         resposta.status(400).json({
+    //             "status": false,
+    //             "mensagem": "Requisição inválida!"
+    //         });
+    //     }
+    // }
     
-    async consultarTodos(requisicao, resposta) {
-        resposta.type('application/json');
+    // async consultarTodos(requisicao, resposta) {
+    //     resposta.type('application/json');
         
-        if (requisicao.method === 'GET') {
-            const projeto = new Projeto(0);  // Instancia a classe Projeto
+    //     if (requisicao.method === 'GET') {
+    //         const projeto = new Projeto(0);  // Instancia a classe Projeto
         
-            projeto.consultarTodos().then((listaProjetos) => {
+    //         projeto.consultarTodos().then((listaProjetos) => {
+    //             resposta.status(200).json({
+    //                 "status": true,
+    //                 "listaProjetos": listaProjetos
+    //             });
+    //         }).catch((erro) => {
+    //             resposta.status(500).json({
+    //                 "status": false,
+    //                 "mensagem": "Erro ao consultar os projetos: " + erro.message
+    //             });
+    //         });
+    //     } else {
+    //         resposta.status(400).json({
+    //             "status": false,
+    //             "mensagem": "Requisição inválida!"
+    //         });
+    //     }
+    // }
+
+    consultar(requisicao, resposta){
+        resposta.type('application/json');  
+        if (requisicao.method === 'GET'){
+            //tentar obter o código do pedido a partir dos parâmetros da URL 
+            let termo = requisicao.params.termo;
+            /*if (!isNaN(termo)){*/
+            const projeto = new Projeto(0);
+            projeto.consultar(termo).then((listaProjetos)=>{
                 resposta.status(200).json({
                     "status": true,
                     "listaProjetos": listaProjetos
-                });
-            }).catch((erro) => {
+                })
+            })
+            .catch((erro)=>{
                 resposta.status(500).json({
                     "status": false,
-                    "mensagem": "Erro ao consultar os projetos: " + erro.message
+                    "mensagem": "Erro ao consultar o projeto: " + erro.message
                 });
             });
-        } else {
+            /*}
+            else{
+                resposta.status(400).json({
+                    "status": false,
+                    "mensagem": "Por favor, informe um códido de pedido válido!"
+                });
+            }*/
+        }
+        else{
             resposta.status(400).json({
                 "status": false,
                 "mensagem": "Requisição inválida!"
-            });
-        }
+            })
+        }     
     }
 }
